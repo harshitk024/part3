@@ -59,7 +59,7 @@ app.get("/api/persons/:id",(request,response) => {
 })
 
 app.delete("/api/persons/:id", (request, response) => {
-  
+
   const id = request.params.id;
 
   persons = persons.filter((person) => person.id !== id);
@@ -68,6 +68,38 @@ app.delete("/api/persons/:id", (request, response) => {
 
 });
 
+const maxInt = (max) => {
+    
+  return Math.floor(Math.random() * max)
+}
+
+app.use(express.json())
+
+app.post("/api/persons",(request,response) => {
+
+  const person = request.body
+
+  if(!person.name  || !person.number){
+    response.statusMessage = "Person name or number is missing"
+    response.status(400).end()
+    return
+  }
+
+  const sameName = persons.find((p) => p.name ===  person.name)
+
+  if(sameName){
+    response.statusMessage = "Person name must be unique"
+    response.status(400).end()
+    return
+  }
+
+  person.id = String(maxInt(10000000))
+
+  persons = persons.concat(person)
+
+  response.json(person)
+  
+})
 
 
 const PORT = 3001
