@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const morgan = require("morgan")
 const cors = require("cors");
 const Person = require("./models/person");
 const app = express();
@@ -7,6 +8,7 @@ const app = express();
 app.use(cors());
 app.use(express.static("dist"));
 app.use(express.json());
+app.use(morgan("dev"))
 
 app.get("/", (request, response) => {
   response.send("<h1>Hello World</h1>");
@@ -108,7 +110,7 @@ app.post("/api/persons", (request, response,next) => {
 
 // Should be the last loaded middleware
 app.use(errorHandler);
-const PORT = process.env.PORT || 3002;
+const PORT = process.env.PORT || 3003;
 
 app.listen(PORT, () => {
   console.log("Server running on PORT : ", PORT);
